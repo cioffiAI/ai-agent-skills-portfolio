@@ -10,18 +10,17 @@ The goal is not to collect generic prompts. The goal is to build a personal oper
 
 ## Project Status
 
-This repository is an early-stage portfolio scaffold.
+This repository contains the first complete version of the seven core AI-agent skills:
 
-It will progressively include:
+- scout
+- planner
+- builder
+- critic-qa
+- librarian
+- operator
+- guardian
 
-- reusable `SKILL.md` files;
-- examples of agent workflows;
-- case studies;
-- verification checklists;
-- small helper scripts;
-- documentation for Codex and Claude Code usage.
-
-The current focus is method and structure: making AI-assisted work repeatable, inspectable, and easier to improve over time.
+The next layer of the project focuses on examples, case studies, validation scripts, and usage documentation.
 
 ---
 
@@ -59,6 +58,20 @@ The portfolio is built around seven main agent roles.
 | Guardian | Controls risk | File safety, privacy, cost, destructive actions, permissions |
 
 These roles do not need to be seven separate autonomous bots. They are reusable mental and operational modes that can be implemented as skills, prompts, subagents, or workflow steps.
+
+---
+
+## Skills Index
+
+| Skill | Purpose | File |
+|---|---|---|
+| Scout | Context discovery | [SKILL.md](skills/scout/SKILL.md) |
+| Planner | Execution planning | [SKILL.md](skills/planner/SKILL.md) |
+| Builder | Focused implementation | [SKILL.md](skills/builder/SKILL.md) |
+| Critic / QA | Review and validation | [SKILL.md](skills/critic-qa/SKILL.md) |
+| Librarian | Knowledge preservation | [SKILL.md](skills/librarian/SKILL.md) |
+| Operator | Repeatable execution | [SKILL.md](skills/operator/SKILL.md) |
+| Guardian | Risk control | [SKILL.md](skills/guardian/SKILL.md) |
 
 ---
 
@@ -406,14 +419,38 @@ What should be reused in future workflows?
 
 ## Roadmap
 
-- [x] Add the first seven `SKILL.md` files.
-- [ ] Add project-level `AGENTS.md` and `CLAUDE.md` examples.
-- [ ] Add one real case study.
-- [ ] Add one example workflow for code review.
-- [ ] Add one example workflow for documentation.
-- [ ] Add one example workflow for safe automation.
-- [ ] Add helper scripts where deterministic checks are better than natural-language review.
-- [ ] Add before/after examples showing how a raw request becomes a structured agent workflow.
+### v0.1 - Scaffold
+
+- [x] Initial README
+- [x] Project purpose
+- [x] Seven-role model
+
+### v0.2 - Core Skills
+
+- [x] Scout
+- [x] Planner
+- [x] Builder
+- [x] Critic / QA
+- [x] Librarian
+- [x] Operator
+- [x] Guardian
+- [x] AGENTS.md
+- [x] CLAUDE.md
+
+### v0.3 - Portfolio Proof Layer
+
+- [ ] Add examples for each skill
+- [x] Add first case study
+- [x] Add validation script
+- [x] Add setup documentation
+- [x] Add changelog
+- [x] Add license
+
+### v0.4 - Public Presentation
+
+- [ ] Add 3 complete case studies
+- [ ] Add a short demo workflow
+- [ ] Add before/after examples
 
 ---
 

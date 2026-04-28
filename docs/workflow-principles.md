@@ -6,7 +6,11 @@ The seven skills are not generic prompts. They are operational roles that make A
 
 Use the smallest role that fits the task.
 
+`AC-Workflow` is the portfolio workflow selector. It is implemented as the `workflow` skill and exists to choose the smallest safe sequence for a request. It is not an eighth role that does the work itself.
+
 ## Recommended Sequences
+
+Start with `AC-Workflow` when the right sequence is not obvious. It should classify the request, select one of the sequences below, and define goal, scope, likely files, risks, and verification before editing.
 
 For unclear work:
 
@@ -123,6 +127,12 @@ Risk control:
 
 ```text
 Use $guardian before deleting files, changing credentials, deploying, or running expensive tools.
+```
+
+Workflow selection:
+
+```text
+Use $workflow for this task. Treat it as AC-Workflow and select the smallest safe skill sequence before editing files.
 ```
 
 ## Practical Rule

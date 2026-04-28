@@ -36,11 +36,12 @@ skills\critic-qa    -> .agents\skills\critic-qa
 skills\librarian    -> .agents\skills\librarian
 skills\operator     -> .agents\skills\operator
 skills\guardian     -> .agents\skills\guardian
+skills\workflow     -> .agents\skills\workflow
 ```
 
 ## Copying Skills
 
-To make the seven portfolio skills globally available to Codex, copy each skill folder:
+To make the portfolio skills globally available to Codex, copy each skill folder:
 
 ```text
 skills\scout        -> C:\Users\antonio\.codex\skills\scout
@@ -50,6 +51,16 @@ skills\critic-qa    -> C:\Users\antonio\.codex\skills\critic-qa
 skills\librarian    -> C:\Users\antonio\.codex\skills\librarian
 skills\operator     -> C:\Users\antonio\.codex\skills\operator
 skills\guardian     -> C:\Users\antonio\.codex\skills\guardian
+skills\workflow     -> C:\Users\antonio\.codex\skills\workflow
+```
+
+`workflow` is the installable skill name for `AC-Workflow`, the portfolio workflow selector.
+
+You can also install it with the npm CLI:
+
+```powershell
+npm install -g cioffi-agentskills
+cioffi-agentskills install workflow --target codex
 ```
 
 Each skill folder should contain at minimum:
@@ -112,4 +123,8 @@ Use $operator to run this checklist step by step and report anomalies.
 
 ```text
 Use $guardian to assess risks before deleting, overwriting, deploying, or exposing sensitive data.
+```
+
+```text
+Use $workflow for this task. Treat it as AC-Workflow and select the smallest safe skill sequence before editing files.
 ```

@@ -10,7 +10,7 @@ The goal is not to collect generic prompts. The goal is to build a personal oper
 
 ## Project Status
 
-This repository contains the first complete version of the seven core AI-agent skills:
+This repository contains the first complete version of the seven core AI-agent skills plus `AC-Workflow`, a workflow selector that chooses the smallest safe combination of those skills for the current task.
 
 - scout
 - planner
@@ -19,6 +19,7 @@ This repository contains the first complete version of the seven core AI-agent s
 - librarian
 - operator
 - guardian
+- workflow
 
 The next layer of the project focuses on examples, case studies, validation scripts, and usage documentation.
 
@@ -72,6 +73,54 @@ These roles do not need to be seven separate autonomous bots. They are reusable 
 | Librarian | Knowledge preservation | [SKILL.md](skills/librarian/SKILL.md) |
 | Operator | Repeatable execution | [SKILL.md](skills/operator/SKILL.md) |
 | Guardian | Risk control | [SKILL.md](skills/guardian/SKILL.md) |
+| AC-Workflow | Workflow selection | [SKILL.md](skills/workflow/SKILL.md) |
+
+---
+
+## CLI Installer
+
+The portfolio includes a small npm CLI for installing skills from GitHub into local Codex and Claude Code skill directories.
+
+Install globally:
+
+```bash
+npm install -g cioffi-agentskills
+```
+
+Check the local environment:
+
+```bash
+cioffi-agentskills doctor --json
+```
+
+List installable skills from the GitHub repository:
+
+```bash
+cioffi-agentskills list --json
+```
+
+Install `AC-Workflow`, the workflow selector skill, into both Codex and Claude Code:
+
+```bash
+cioffi-agentskills install workflow
+```
+
+By default the CLI reads from:
+
+```text
+cioffiAI/ai-agent-skills-portfolio@main
+```
+
+Useful options:
+
+```bash
+cioffi-agentskills install workflow --target codex
+cioffi-agentskills install workflow --target claude
+cioffi-agentskills install workflow --dry-run --json
+cioffi-agentskills install workflow --repo cioffiAI/ai-agent-skills-portfolio --ref main
+```
+
+If a skill already exists, the CLI creates a timestamped backup next to it before installing the downloaded version. The installed skill name is `workflow`; the documented workflow name is `AC-Workflow`.
 
 ---
 
@@ -134,6 +183,8 @@ ai-agent-skills-portfolio/
 │       └── scout-example.md
 ```
 
+The repository also includes the npm CLI entrypoint in `bin/cioffi-agentskills.js`, package metadata in `package.json`, and the `AC-Workflow` skill in `skills/workflow/SKILL.md`.
+
 ---
 
 ## How Skills Are Intended to Work
@@ -194,6 +245,8 @@ Return:
 ## Example Workflow
 
 A typical workflow should not jump directly from request to implementation.
+
+`AC-Workflow` is the workflow selector for this portfolio. Use it when the task is not obviously a single role. It classifies the request and selects the smallest safe sequence instead of running every skill by default.
 
 Preferred sequence:
 
@@ -453,6 +506,7 @@ What should be reused in future workflows?
 - [x] Librarian
 - [x] Operator
 - [x] Guardian
+- [x] AC-Workflow
 - [x] AGENTS.md
 - [x] CLAUDE.md
 
@@ -464,6 +518,7 @@ What should be reused in future workflows?
 - [x] Add setup documentation
 - [x] Add changelog
 - [x] Add license
+- [x] Add npm CLI installer
 
 ### v0.4 - Public Presentation
 

@@ -3,11 +3,11 @@ name: workflow
 description: Select and run the smallest appropriate combination of scout, planner, builder, critic-qa, librarian, operator, and guardian for the current task.
 ---
 
-# Workflow Selector
+# AC-Workflow
 
 ## Objective
 
-Choose the smallest safe agent workflow for the current request.
+Choose the smallest safe agent workflow for the current request. `AC-Workflow` is implemented as the installable `workflow` skill.
 
 ## Procedure
 

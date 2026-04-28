@@ -41,6 +41,10 @@ Prioritize correctness, minimality, clarity, and traceability over speed or cosm
 
 ## Standard Workflow
 
+This repository uses `AC-Workflow` as the name of its workflow selector. The corresponding skill is stored as `workflow` so it can be invoked or installed consistently across tools.
+
+Use `AC-Workflow` when a task needs classification before choosing a role sequence. It should select the smallest safe combination of `scout`, `planner`, `builder`, `critic-qa`, `librarian`, `operator`, and `guardian`; it should not run every role by default.
+
 For non-trivial tasks, follow this sequence:
 
 1. Read the relevant files before editing.

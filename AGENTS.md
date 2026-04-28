@@ -41,6 +41,29 @@ Do not edit before understanding the surrounding context.
 
 ---
 
+## Project Workflow
+
+This repository includes `AC-Workflow`, implemented as the `workflow` skill. Use it as a workflow selector when the correct role sequence is not obvious.
+
+`AC-Workflow` should choose the smallest safe combination of `scout`, `planner`, `builder`, `critic-qa`, `librarian`, `operator`, and `guardian`. Do not run every skill by default.
+
+Before editing files, define:
+
+- goal;
+- scope;
+- files likely involved;
+- risks;
+- verification.
+
+After work, report:
+
+- workflow used;
+- changed files;
+- verification;
+- remaining uncertainty.
+
+---
+
 ## Editing Rules
 
 When modifying files:

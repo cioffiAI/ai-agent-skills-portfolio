@@ -1,0 +1,36 @@
+{
+  "name": "cioffi-agentskills",
+  "version": "0.1.1",
+  "description": "Install AI agent skills for Codex and Claude Code from cioffiAI/ai-agent-skills-portfolio.",
+  "license": "MIT",
+  "bin": {
+    "cioffi-agentskills": "bin/cioffi-agentskills.js"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "docs/",
+    "case-studies/",
+    "scripts/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test:skills": "py ./scripts/validate_skills.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cioffiAI/ai-agent-skills-portfolio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cioffiAI/ai-agent-skills-portfolio/issues"
+  },
+  "homepage": "https://github.com/cioffiAI/ai-agent-skills-portfolio#readme",
+  "dependencies": {
+    "cioffi-agentskills": "^0.1.0"
+  }
+}

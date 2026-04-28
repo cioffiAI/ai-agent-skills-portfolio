@@ -28,7 +28,7 @@ If you want Claude Code to use project-local copies, copy them from `skills\` in
 
 ## Copying Skills
 
-To make the seven portfolio skills globally available to Claude Code, copy each skill folder:
+To make the portfolio skills globally available to Claude Code, copy each skill folder:
 
 ```text
 skills\scout        -> C:\Users\antonio\.claude\skills\scout
@@ -38,6 +38,16 @@ skills\critic-qa    -> C:\Users\antonio\.claude\skills\critic-qa
 skills\librarian    -> C:\Users\antonio\.claude\skills\librarian
 skills\operator     -> C:\Users\antonio\.claude\skills\operator
 skills\guardian     -> C:\Users\antonio\.claude\skills\guardian
+skills\workflow     -> C:\Users\antonio\.claude\skills\workflow
+```
+
+`workflow` is the installable skill name for `AC-Workflow`, the portfolio workflow selector.
+
+You can also install it with the npm CLI:
+
+```powershell
+npm install -g cioffi-agentskills
+cioffi-agentskills install workflow --target claude
 ```
 
 Each skill folder should contain:
@@ -92,4 +102,8 @@ Use the operator skill to run this validation checklist and report each result.
 
 ```text
 Use the guardian skill before performing any destructive, costly, or privacy-sensitive action.
+```
+
+```text
+Use the workflow skill for this task. Treat it as AC-Workflow and select the smallest safe skill sequence before editing files.
 ```

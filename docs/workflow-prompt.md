@@ -1,11 +1,11 @@
-﻿# Workflow Selector Prompt
+# AC-Workflow Prompt
 
-Use the smallest sufficient skill combination based on task type.
+Use the smallest sufficient skill combination based on task type. `AC-Workflow` is implemented as the `workflow` skill.
 
 ## Workflows
 
 **Unclear task:** scout -> planner
-**Implementation:** planner -> builder -> critic-qa  
+**Implementation:** planner -> builder -> critic-qa
 **Risky implementation:** scout -> planner -> guardian -> builder -> critic-qa
 **Documentation:** scout -> librarian -> critic-qa
 **Repeatable procedure:** operator -> critic-qa

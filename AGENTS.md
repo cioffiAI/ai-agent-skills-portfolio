@@ -1,9 +1,3 @@
-
----
-
-## `AGENTS.md`
-
-```markdown
 # AGENTS.md
 
 ## Purpose

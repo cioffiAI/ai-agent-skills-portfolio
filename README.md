@@ -474,6 +474,5 @@ That loop is the real portfolio.
 
 ## License
 
-No license has been selected yet.
-
-Until a license is added, all rights are reserved by default.
+This project is released under the MIT License.
+See [LICENSE](LICENSE).

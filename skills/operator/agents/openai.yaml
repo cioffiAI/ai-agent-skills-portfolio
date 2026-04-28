@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operator"
+  short_description: "Run repeatable procedures carefully"
+  default_prompt: "Use $operator to execute this procedure step by step and report anomalies."

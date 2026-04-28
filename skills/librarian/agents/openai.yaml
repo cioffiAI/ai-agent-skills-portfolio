@@ -1,0 +1,4 @@
+interface:
+  display_name: "Librarian"
+  short_description: "Organize and preserve project knowledge"
+  default_prompt: "Use $librarian to update documentation and preserve reusable decisions."

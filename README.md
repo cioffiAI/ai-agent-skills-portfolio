@@ -406,7 +406,7 @@ What should be reused in future workflows?
 
 ## Roadmap
 
-- [ ] Add the first seven `SKILL.md` files.
+- [x] Add the first seven `SKILL.md` files.
 - [ ] Add project-level `AGENTS.md` and `CLAUDE.md` examples.
 - [ ] Add one real case study.
 - [ ] Add one example workflow for code review.

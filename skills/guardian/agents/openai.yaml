@@ -1,0 +1,4 @@
+interface:
+  display_name: "Guardian"
+  short_description: "Control risk, privacy, and cost"
+  default_prompt: "Use $guardian to assess risks and stop conditions before proceeding."

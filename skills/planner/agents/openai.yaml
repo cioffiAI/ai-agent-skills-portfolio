@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planner"
+  short_description: "Turn goals into safe execution plans"
+  default_prompt: "Use $planner to turn this request into a minimal, verifiable plan."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Critic / QA"
+  short_description: "Review work for bugs and gaps"
+  default_prompt: "Use $critic-qa to review this work for bugs, weak assumptions, and missing checks."

@@ -161,7 +161,7 @@ async function doctor(options) {
 }
 
 async function listSkills(options) {
-  const skills = await fetchSkillList(options.repo, options.ref);
+  const skills = listLocalSkills();
   return {
     ok: true,
     command: "list",
@@ -169,7 +169,20 @@ async function listSkills(options) {
     text: skills.map((skill) => skill.name).join("\n"),
     results: skills,
   };
+function listLocalSkills() {
+  const skillsDir = path.join(PACKAGE_ROOT, "skills");
+
+  return fs.readdirSync(skillsDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .filter((entry) => fs.existsSync(path.join(skillsDir, entry.name, "SKILL.md")))
+    .map((entry) => ({
+      name: entry.name,
+      source: path.join(skillsDir, entry.name),
+    }))
+    .sort((left, right) => left.name.localeCompare(right.name));
 }
+}
+
 
 async function installSkill(options) {
   const skillName = options.positional[0];
@@ -207,7 +220,7 @@ async function installSkill(options) {
       skillPath,
       exists,
       backupPath,
-      source: rawSkillUrl(options.repo, options.ref, skillName),
+      source: sourceDir,
     });
   }
 
@@ -293,13 +306,13 @@ async function askConfirm(actions) {
     output: process.stdout,
   });
 
-  const lines = actions.map((action) => {
-    const targetDir = path.dirname(action.skillPath);
-    if (action.exists) {
-      return `  Replace: ${action.skillPath}`;
-    }
-    return `  Install: ${action.skillPath}`;
-  });
+const lines = actions.map((action) => {
+  if (action.exists) {
+    return `  Exists, will skip unless --force: ${action.skillDir}`;
+  }
+  return `  Install: ${action.skillDir}`;
+});
+
 
   const question = `Confirm install (${actions.length} target${actions.length > 1 ? "s" : ""})?\n${lines.join("\n")}\n[y/N] `;
 
@@ -314,11 +327,10 @@ async function askConfirm(actions) {
 function formatInstallDryRun(actions) {
   return actions
     .map((action) => {
-      const targetDir = path.dirname(action.skillPath);
       if (action.exists) {
-        return `Would replace: ${action.skillPath}`;
+        return `Would skip existing skill unless --force: ${action.skillDir}`;
       }
-      return `Would install: ${action.skillPath}`;
+      return `Would install: ${action.skillDir}`;
     })
     .join("\n");
 }
@@ -396,23 +408,8 @@ async function fetchSkillList(repo, ref) {
     .sort((left, right) => left.name.localeCompare(right.name));
 }
 
-async function fetchSkillContent(repo, ref, skillName) {
-  const response = await fetch(rawSkillUrl(repo, ref, skillName));
-  if (response.status === 404) {
-    throw cliError("SKILL_NOT_FOUND", `Skill not found: ${skillName}`);
-  }
-  if (!response.ok) {
-    throw cliError("FETCH_SKILL_FAILED", `Could not download ${skillName}: ${response.status}`);
-  }
-  return response.text();
-}
-
 function githubContentsUrl(repo, ref) {
   return `https://api.github.com/repos/${repo}/contents/skills?ref=${encodeURIComponent(ref)}`;
-}
-
-function rawSkillUrl(repo, ref, skillName) {
-  return `https://raw.githubusercontent.com/${repo}/${encodeURIComponent(ref)}/skills/${encodeURIComponent(skillName)}/SKILL.md`;
 }
 
 function validateSkillName(skillName) {
@@ -464,6 +461,10 @@ function formatDoctor(results) {
 function formatInstall(results) {
   return results
     .map((result) => {
+      if (result.skipped) {
+        return `Skipped ${result.skill} for ${result.target}: ${result.path} reason=${result.reason}`;
+      }
+
       const action = result.dryRun ? "Would install" : "Installed";
       const backup = result.backup ? ` backup=${result.backup}` : "";
       return `${action} ${result.skill} for ${result.target}: ${result.path}${backup}`;
@@ -524,17 +525,17 @@ function getPackageVersion() {
 function helpText() {
   return `cioffi-agentskills
 
-Install AI agent skills for Codex and Claude Code from GitHub.
+Install packaged AI agent skills for Codex and Claude Code.
 
 Usage:
-  cioffi-agentskills doctor [--json] [--target codex|claude|both] [--repo owner/name] [--ref ref]
+  cioffi-agentskills install <skill> [--json] [--dry-run] [--yes] [--force] [--target codex|claude|both]
   cioffi-agentskills list [--json] [--repo owner/name] [--ref ref]
   cioffi-agentskills install <skill> [--json] [--dry-run] [--yes] [--force] [--target codex|claude|both] [--repo owner/name] [--ref ref]
 
 Options:
   --target <target>  Install/check codex, claude, or both. Default: both.
-  --repo <repo>      GitHub repo owner/name. Default: ${DEFAULT_REPO}.
-  --ref <ref>        Git ref to read from. Default: ${DEFAULT_REF}.
+  --repo <repo>      GitHub repo owner/name for doctor/list. Default: ${DEFAULT_REPO}.
+  --ref <ref>        Git ref for doctor/list. Default: ${DEFAULT_REF}.
   --json             Print stable JSON output (skips all prompts).
   --dry-run          Show install actions without writing files.
   --yes, -y          Skip confirmation prompt (auto-confirm).

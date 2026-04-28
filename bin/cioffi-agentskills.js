@@ -162,6 +162,7 @@ async function doctor(options) {
 
 async function listSkills(options) {
   const skills = listLocalSkills();
+
   return {
     ok: true,
     command: "list",
@@ -169,6 +170,8 @@ async function listSkills(options) {
     text: skills.map((skill) => skill.name).join("\n"),
     results: skills,
   };
+}
+
 function listLocalSkills() {
   const skillsDir = path.join(PACKAGE_ROOT, "skills");
 
@@ -181,7 +184,6 @@ function listLocalSkills() {
     }))
     .sort((left, right) => left.name.localeCompare(right.name));
 }
-}
 
 
 async function installSkill(options) {
@@ -191,8 +193,12 @@ async function installSkill(options) {
   }
   validateSkillName(skillName);
 
-  const sourceDir = path.join(PACKAGE_ROOT, "skills", skillName);
-  const skillPath = path.join(sourceDir, "SKILL.md");
+if (skillName === "all") {
+  return installAllSkills(options);
+}
+
+const sourceDir = path.join(PACKAGE_ROOT, "skills", skillName);
+const skillPath = path.join(sourceDir, "SKILL.md");
 
   if (!fs.existsSync(skillPath)) {
     throw cliError("SKILL_NOT_FOUND", `Skill not found: ${skillName}`);
@@ -285,6 +291,128 @@ async function installSkill(options) {
       target: action.target,
       skill: action.skill,
       path: skillDir,
+      installed: true,
+      backup: action.backupPath,
+      source: action.source,
+    });
+  }
+
+  return {
+    ok: true,
+    command: "install",
+    json: options.json,
+    text: formatInstall(results),
+    results,
+  };
+}
+
+async function installAllSkills(options) {
+  const skills = listLocalSkills();
+
+  if (skills.length === 0) {
+    throw cliError("NO_SKILLS_FOUND", "No local skills found in package");
+  }
+
+  const targets = targetDirectories(options.target);
+  const actions = [];
+
+  for (const skill of skills) {
+    const skillName = skill.name;
+    const sourceDir = path.join(PACKAGE_ROOT, "skills", skillName);
+    const skillPath = path.join(sourceDir, "SKILL.md");
+
+    const content = fs.readFileSync(skillPath, "utf8");
+    const missing = missingRequiredSections(content);
+
+    if (missing.length > 0) {
+      throw cliError(
+        "INVALID_SKILL",
+        `Skill ${skillName} is missing required sections: ${missing.join(", ")}`
+      );
+    }
+
+    for (const target of targets) {
+      const skillDir = path.join(target.skillsDir, skillName);
+      const destinationSkillPath = path.join(skillDir, "SKILL.md");
+      const exists = fs.existsSync(skillDir);
+      const backupPath = exists ? uniqueBackupPath(target.skillsDir, skillName) : null;
+
+      actions.push({
+        target: target.name,
+        skill: skillName,
+        sourceDir,
+        skillDir,
+        skillPath: destinationSkillPath,
+        exists,
+        backupPath,
+        source: sourceDir,
+      });
+    }
+  }
+
+  if (options.dryRun) {
+    return {
+      ok: true,
+      command: "install",
+      json: options.json,
+      text: formatInstallDryRun(actions),
+      results: actions.map((action) => ({
+        ...action,
+        dryRun: true,
+        installed: false,
+      })),
+    };
+  }
+
+  if (options.json && !options.yes) {
+    throw cliError(
+      "CONFIRMATION_REQUIRED",
+      "Use --yes with --json to confirm non-interactive installation"
+    );
+  }
+
+  if (!options.json && !options.yes) {
+    const confirmed = await askConfirm(actions);
+    if (!confirmed) {
+      return {
+        ok: false,
+        command: "install",
+        json: false,
+        text: "Install cancelled.",
+        results: [],
+      };
+    }
+  }
+
+  const results = [];
+
+  for (const action of actions) {
+    const target = targets.find((item) => item.name === action.target);
+
+    if (action.exists && !options.force) {
+      results.push({
+        target: action.target,
+        skill: action.skill,
+        path: action.skillDir,
+        installed: false,
+        skipped: true,
+        reason: "already_exists",
+      });
+      continue;
+    }
+
+    fs.mkdirSync(target.skillsDir, { recursive: true });
+
+    if (action.exists) {
+      fs.renameSync(action.skillDir, action.backupPath);
+    }
+
+    fs.cpSync(action.sourceDir, action.skillDir, { recursive: true });
+
+    results.push({
+      target: action.target,
+      skill: action.skill,
+      path: action.skillDir,
       installed: true,
       backup: action.backupPath,
       source: action.source,

@@ -28,8 +28,4 @@ All notable changes to this project will be documented in this file.
 
 - Created the initial project README.
 - Defined the purpose of the portfolio.
-<<<<<<< HEAD
 - Defined the seven-role model for AI-agent workflows.
-=======
-- Defined the seven-role model for AI-agent workflows.
->>>>>>> c90e90be4683c61d5228162b50bdeb0693414437

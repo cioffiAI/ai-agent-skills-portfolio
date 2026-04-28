@@ -17,12 +17,12 @@ Procedure run:
 Inputs used:
 
 - Directory: `skills/`
-- Validatore: `quick_validate.py`
+- Validatore: `scripts/validate_skills.py`
 
 Commands or actions executed:
 
 - Elencate le sottocartelle in `skills/`.
-- Eseguito il validatore su ogni cartella skill.
+- Eseguito `scripts/validate_skills.py` sulle skill locali.
 
 Outputs produced:
 

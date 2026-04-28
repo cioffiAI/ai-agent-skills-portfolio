@@ -10,6 +10,8 @@ builder
 
 ## Output
 
+Note: this is an illustrative example, not a record of an actual repository change.
+
 Changed files:
 
 - `skills/operator/SKILL.md`

@@ -307,7 +307,7 @@ If a workflow cannot be explained, repeated, or audited, it is not yet mature.
 
 ---
 
-## Planned Skills
+## Skill Details
 
 ### Scout
 
@@ -458,7 +458,7 @@ What should be reused in future workflows?
 
 ### v0.3 - Portfolio Proof Layer
 
-- [ ] Add examples for each skill
+- [x] Add examples for each skill
 - [x] Add first case study
 - [x] Add validation script
 - [x] Add setup documentation

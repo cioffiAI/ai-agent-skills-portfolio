@@ -58,11 +58,13 @@ Each skill folder should contain at minimum:
 SKILL.md
 ```
 
-This portfolio also includes:
+Each skill folder can also include:
 
 ```text
-agents\openai.yaml
+skills\<skill-name>\agents\openai.yaml
 ```
+
+These files provide display metadata and default prompts for the skill.
 
 ## Global vs Project Skills
 

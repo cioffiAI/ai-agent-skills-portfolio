@@ -35,7 +35,7 @@ Inferred:
 
 Missing:
 
-- Non esistono ancora esempi input/output per ogni skill.
+- Non è ancora chiaro se gli esempi coprano casi reali sufficientemente diversi.
 
 Recommended next step: usare `librarian` per aggiungere esempi documentali oppure `planner` se serve prima definire una struttura più ampia.
 

@@ -79,12 +79,12 @@ These roles do not need to be seven separate autonomous bots. They are reusable 
 
 ## CLI Installer
 
-The portfolio includes a small npm CLI for installing skills from GitHub into local Codex and Claude Code skill directories.
+The portfolio includes a small npm CLI for installing the packaged skills into local Codex and Claude Code skill directories.
 
 Install globally:
 
 ```bash
-npm install -g cioffi-agentskills
+npm install -g cioffi-agentskills@0.1.1
 ```
 
 Check the local environment:
@@ -93,34 +93,155 @@ Check the local environment:
 cioffi-agentskills doctor --json
 ```
 
-List installable skills from the GitHub repository:
+List packaged skills:
 
 ```bash
 cioffi-agentskills list --json
 ```
 
-Install `AC-Workflow`, the workflow selector skill, into both Codex and Claude Code:
+Install all packaged skills into both Codex and Claude Code:
 
 ```bash
-cioffi-agentskills install workflow
+cioffi-agentskills install all --target both
 ```
 
-By default the CLI reads from:
+Install only `AC-Workflow`, the workflow selector skill:
+
+```bash
+cioffi-agentskills install workflow --target both
+```
+
+The CLI installs skills into:
 
 ```text
-cioffiAI/ai-agent-skills-portfolio@main
+$HOME/.codex/skills/<skill-name>
+$HOME/.claude/skills/<skill-name>
+```
+
+On Windows, this usually means:
+
+```text
+C:\Users\<user>\.codex\skills\<skill-name>
+C:\Users\<user>\.claude\skills\<skill-name>
 ```
 
 Useful options:
 
 ```bash
-cioffi-agentskills install workflow --target codex
-cioffi-agentskills install workflow --target claude
-cioffi-agentskills install workflow --dry-run --json
-cioffi-agentskills install workflow --repo cioffiAI/ai-agent-skills-portfolio --ref main
+cioffi-agentskills install all --target codex
+cioffi-agentskills install all --target claude
+cioffi-agentskills install all --target both --dry-run
+cioffi-agentskills install all --target both --yes
+cioffi-agentskills install all --target both --yes --force
+cioffi-agentskills install workflow --target both --dry-run --json
 ```
 
-If a skill already exists, the CLI creates a timestamped backup next to it before installing the downloaded version. The installed skill name is `workflow`; the documented workflow name is `AC-Workflow`.
+Safety behavior:
+
+```text
+without --yes, interactive installs ask for confirmation;
+with --json, real installs require --yes;
+without --force, existing skill folders are skipped;
+with --force, existing skill folders are backed up before replacement;
+--dry-run shows planned actions without writing files.
+```
+
+The installable skill name is `workflow`; the documented workflow name is `AC-Workflow`.
+
+---
+
+## CLI Behavior in v0.1.1
+
+`cioffi-agentskills@0.1.1` installs skills from the packaged npm contents, not from the live GitHub repository.
+
+This makes installations reproducible for a given npm version.
+
+Commands:
+
+```bash
+cioffi-agentskills list
+```
+
+Lists packaged skills.
+
+```bash
+cioffi-agentskills install all --target both
+```
+
+Installs all packaged skills into Codex and Claude Code user skill folders.
+
+```bash
+cioffi-agentskills install workflow --target both
+```
+
+Installs only `AC-Workflow`.
+
+Safety behavior:
+
+```text
+--dry-run previews actions without writing files;
+--json requires --yes for real installs;
+existing skill folders are skipped unless --force is used;
+--force backs up existing skill folders before replacing them.
+```
+
+---
+
+## Install on Another Machine
+
+On another machine with Node.js 18 or newer:
+
+```powershell
+npm install -g cioffi-agentskills@0.1.1
+cioffi-agentskills doctor --json
+cioffi-agentskills install all --target both
+```
+
+Verify installation:
+
+```powershell
+Get-ChildItem "$HOME\.codex\skills"
+Get-ChildItem "$HOME\.claude\skills"
+```
+
+Expected installed skills:
+
+```text
+builder
+critic-qa
+guardian
+librarian
+operator
+planner
+scout
+workflow
+```
+
+---
+
+## Manual Uninstall
+
+Until a CLI `uninstall` command is added, remove installed skills manually.
+
+PowerShell:
+
+```powershell
+$skills = @(
+  "builder",
+  "critic-qa",
+  "guardian",
+  "librarian",
+  "operator",
+  "planner",
+  "scout",
+  "workflow"
+)
+
+foreach ($skill in $skills) {
+  Remove-Item -Recurse -Force "$HOME\.codex\skills\$skill" -ErrorAction SilentlyContinue
+  Remove-Item -Recurse -Force "$HOME\.claude\skills\$skill" -ErrorAction SilentlyContinue
+}
+```
 
 ---
 
@@ -176,14 +297,16 @@ ai-agent-skills-portfolio/
 │   │   ├── agents/
 │   │   │   └── openai.yaml
 │   │   └── planner-example.md
-│   └── scout/
-│       ├── SKILL.md
-│       ├── agents/
-│       │   └── openai.yaml
-│       └── scout-example.md
+│   ├── scout/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── scout-example.md
+│   └── workflow/
+│       └── SKILL.md
 ```
 
-The repository also includes the npm CLI entrypoint in `bin/cioffi-agentskills.js`, package metadata in `package.json`, and the `AC-Workflow` skill in `skills/workflow/SKILL.md`.
+The repository also includes the npm CLI entrypoint in `bin/cioffi-agentskills.js` and package metadata in `package.json`.
 
 ---
 
@@ -519,6 +642,9 @@ What should be reused in future workflows?
 - [x] Add changelog
 - [x] Add license
 - [x] Add npm CLI installer
+- [x] Add packaged local skill installation
+- [x] Add `install all` workflow
+- [x] Add confirmation, dry-run, JSON, skip, and force behavior
 
 ### v0.4 - Public Presentation
 

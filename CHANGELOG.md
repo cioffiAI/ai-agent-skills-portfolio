@@ -4,8 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- No unreleased changes yet.
+
+## v0.1.1 - npm CLI local skill installer
+
 - Added npm CLI package metadata for `cioffi-agentskills`.
 - Added `cioffi-agentskills` command with `doctor`, `list`, and `install` commands.
+- Added packaged local skill installation from the npm package contents.
+- Added support for installing all packaged skills with `install all`.
+- Added support for installing into Codex and Claude Code user skill folders:
+  - `$HOME/.codex/skills`
+  - `$HOME/.claude/skills`
+- Added interactive confirmation for real installs.
+- Added `--dry-run`, `--json`, `--yes`, `--force`, and `--target` behavior.
 - Documented global npm installation and workflow skill installation examples.
 - Documented the `workflow` skill as `AC-Workflow` across repository guidance and setup docs.
 

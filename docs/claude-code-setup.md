@@ -43,11 +43,23 @@ skills\workflow     -> C:\Users\antonio\.claude\skills\workflow
 
 `workflow` is the installable skill name for `AC-Workflow`, the portfolio workflow selector.
 
-You can also install it with the npm CLI:
+You can also install the packaged skills with the npm CLI:
 
 ```powershell
-npm install -g cioffi-agentskills
+npm install -g cioffi-agentskills@0.1.1
+cioffi-agentskills install all --target claude
+```
+
+To install only AC-Workflow:
+
+```powershell
 cioffi-agentskills install workflow --target claude
+```
+
+Use `--dry-run` to preview the installation without writing files:
+
+```powershell
+cioffi-agentskills install all --target claude --dry-run
 ```
 
 Each skill folder should contain:

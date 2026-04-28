@@ -8,6 +8,34 @@ Use the smallest role that fits the task.
 
 `AC-Workflow` is the portfolio workflow selector. It is implemented as the `workflow` skill and exists to choose the smallest safe sequence for a request. It is not an eighth role that does the work itself.
 
+## Installing the Workflow System
+
+The complete workflow system can be installed with the npm CLI:
+
+```powershell
+npm install -g cioffi-agentskills@0.1.1
+cioffi-agentskills install all --target both
+```
+
+This installs the packaged skills into:
+
+```text
+$HOME/.codex/skills
+$HOME/.claude/skills
+```
+
+To preview the operation without writing files:
+
+```powershell
+cioffi-agentskills install all --target both --dry-run
+```
+
+To replace existing installed skills, use:
+
+```powershell
+cioffi-agentskills install all --target both --yes --force
+```
+
 ## Recommended Sequences
 
 Start with `AC-Workflow` when the right sequence is not obvious. It should classify the request, select one of the sequences below, and define goal, scope, likely files, risks, and verification before editing.

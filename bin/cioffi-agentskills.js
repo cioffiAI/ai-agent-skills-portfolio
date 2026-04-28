@@ -8,7 +8,7 @@ const readline = require("readline");
 const DEFAULT_REPO = "cioffiAI/ai-agent-skills-portfolio";
 const DEFAULT_REF = "main";
 const VALID_TARGETS = new Set(["codex", "claude", "both"]);
-const REQUIRED_SECTIONS = ["---", "name:", "description:", "## Objective", "## Procedure", "## Output"];
+const REQUIRED_SECTIONS = ["---", "name:", "description:", "## Objective", "## Procedure", "## Output", "## Limits"];
 const PACKAGE_ROOT = path.resolve(__dirname, "..");
 
 function main(argv) {
@@ -178,10 +178,17 @@ async function installSkill(options) {
   }
   validateSkillName(skillName);
 
-  const content = await fetchSkillContent(options.repo, options.ref, skillName);
+  const sourceDir = path.join(PACKAGE_ROOT, "skills", skillName);
+  const skillPath = path.join(sourceDir, "SKILL.md");
+
+  if (!fs.existsSync(skillPath)) {
+    throw cliError("SKILL_NOT_FOUND", `Skill not found: ${skillName}`);
+  }
+
+  const content = fs.readFileSync(skillPath, "utf8");
   const missing = missingRequiredSections(content);
   if (missing.length > 0) {
-    throw cliError("INVALID_SKILL", `Downloaded skill is missing required sections: ${missing.join(", ")}`);
+    throw cliError("INVALID_SKILL", `Skill is missing required sections: ${missing.join(", ")}`);
   }
 
   const targets = targetDirectories(options.target);
@@ -218,6 +225,13 @@ async function installSkill(options) {
     };
   }
 
+  if (options.json && !options.yes) {
+    throw cliError(
+      "CONFIRMATION_REQUIRED",
+      "Use --yes with --json to confirm non-interactive installation"
+    );
+  }
+
   if (!options.json && !options.yes) {
     const confirmed = await askConfirm(actions);
     if (!confirmed) {
@@ -233,22 +247,33 @@ async function installSkill(options) {
 
   const results = [];
   for (const action of actions) {
-    const { skillDir, skillPath, exists, backupPath } = action;
+    const { skillDir, exists } = action;
     const target = targets.find((t) => t.name === action.target);
+
+    if (exists && !options.force) {
+      results.push({
+        target: action.target,
+        skill: action.skill,
+        path: skillDir,
+        installed: false,
+        skipped: true,
+        reason: "already_exists",
+      });
+      continue;
+    }
 
     fs.mkdirSync(target.skillsDir, { recursive: true });
     if (exists) {
-      fs.renameSync(skillDir, backupPath);
+      fs.renameSync(skillDir, action.backupPath);
     }
-    fs.mkdirSync(skillDir, { recursive: true });
-    fs.writeFileSync(skillPath, content, "utf8");
+    fs.cpSync(sourceDir, skillDir, { recursive: true });
 
     results.push({
       target: action.target,
       skill: action.skill,
-      path: skillPath,
+      path: skillDir,
       installed: true,
-      backup: backupPath,
+      backup: action.backupPath,
       source: action.source,
     });
   }

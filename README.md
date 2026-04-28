@@ -77,43 +77,62 @@ These roles do not need to be seven separate autonomous bots. They are reusable 
 
 ## Repository Structure
 
-Planned structure:
+Current structure:
 
 ```text
 ai-agent-skills-portfolio/
+├── AGENTS.md
+├── CHANGELOG.md
+├── CLAUDE.md
+├── LICENSE
 ├── README.md
-├── skills/
-│   ├── scout/
-│   │   └── SKILL.md
-│   ├── planner/
-│   │   └── SKILL.md
-│   ├── builder/
-│   │   └── SKILL.md
-│   ├── critic-qa/
-│   │   └── SKILL.md
-│   ├── librarian/
-│   │   └── SKILL.md
-│   ├── operator/
-│   │   └── SKILL.md
-│   └── guardian/
-│       └── SKILL.md
 ├── case-studies/
-│   ├── 01-from-request-to-plan.md
+│   ├── 01-from-messy-request-to-plan.md
 │   ├── 02-code-review-with-critic.md
 │   └── 03-safe-automation-workflow.md
-├── examples/
-│   ├── prompts/
-│   ├── outputs/
-│   └── workflows/
+├── docs/
+│   ├── claude-code-setup.md
+│   ├── codex-setup.md
+│   └── workflow-principles.md
 ├── scripts/
-│   └── README.md
-└── docs/
-    ├── codex-setup.md
-    ├── claude-code-setup.md
-    └── workflow-principles.md
+│   └── validate_skills.py
+├── skills/
+│   ├── builder/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── builder-example.md
+│   ├── critic-qa/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── critic-qa-example.md
+│   ├── guardian/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── guardian-example.md
+│   ├── librarian/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── librarian-example.md
+│   ├── operator/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── operator-example.md
+│   ├── planner/
+│   │   ├── SKILL.md
+│   │   ├── agents/
+│   │   │   └── openai.yaml
+│   │   └── planner-example.md
+│   └── scout/
+│       ├── SKILL.md
+│       ├── agents/
+│       │   └── openai.yaml
+│       └── scout-example.md
 ```
-
-This structure may change as the portfolio becomes more concrete.
 
 ---
 
@@ -448,7 +467,7 @@ What should be reused in future workflows?
 
 ### v0.4 - Public Presentation
 
-- [ ] Add 3 complete case studies
+- [x] Add 3 complete case studies
 - [ ] Add a short demo workflow
 - [ ] Add before/after examples
 

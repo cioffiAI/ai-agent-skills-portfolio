@@ -13,7 +13,7 @@ Use the smallest role that fits the task.
 The complete workflow system can be installed with the npm CLI:
 
 ```powershell
-npm install -g cioffi-agentskills@0.1.1
+npm install -g cioffi-agentskills@0.1.2
 cioffi-agentskills install all --target both
 ```
 

@@ -84,7 +84,7 @@ The portfolio includes a small npm CLI for installing the packaged skills into l
 Install globally:
 
 ```bash
-npm install -g cioffi-agentskills@0.1.1
+npm install -g cioffi-agentskills@0.1.2
 ```
 
 Check the local environment:
@@ -150,9 +150,9 @@ The installable skill name is `workflow`; the documented workflow name is `AC-Wo
 
 ---
 
-## CLI Behavior in v0.1.1
+## CLI Behavior in v0.1.2
 
-`cioffi-agentskills@0.1.1` installs skills from the packaged npm contents, not from the live GitHub repository.
+`cioffi-agentskills@0.1.2` installs skills from the packaged npm contents, not from the live GitHub repository.
 
 This makes installations reproducible for a given npm version.
 
@@ -192,7 +192,7 @@ existing skill folders are skipped unless --force is used;
 On another machine with Node.js 18 or newer:
 
 ```powershell
-npm install -g cioffi-agentskills@0.1.1
+npm install -g cioffi-agentskills@0.1.2
 cioffi-agentskills doctor --json
 cioffi-agentskills install all --target both
 ```

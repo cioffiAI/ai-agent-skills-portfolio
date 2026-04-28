@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 - No unreleased changes yet.
 
+## v0.1.2 - install all npm release fix
+
+- Bumped the npm package version so the `install all` CLI support can be published in a new immutable npm release.
+
 ## v0.1.1 - npm CLI local skill installer
 
 - Added npm CLI package metadata for `cioffi-agentskills`.

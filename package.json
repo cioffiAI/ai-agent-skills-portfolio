@@ -1,6 +1,6 @@
 {
   "name": "cioffi-agentskills",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Install packaged AI agent skills for Codex and Claude Code.",
   "license": "MIT",
   "bin": {

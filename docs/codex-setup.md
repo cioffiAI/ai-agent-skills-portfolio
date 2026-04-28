@@ -59,7 +59,7 @@ skills\workflow     -> C:\Users\antonio\.codex\skills\workflow
 You can also install the packaged skills with the npm CLI:
 
 ```powershell
-npm install -g cioffi-agentskills@0.1.1
+npm install -g cioffi-agentskills@0.1.2
 cioffi-agentskills install all --target codex
 ```
 

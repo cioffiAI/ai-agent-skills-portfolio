@@ -15,13 +15,27 @@ Use this when the skill should be available in any Codex session, across project
 Project skills:
 
 ```text
-<project-root>\skills\
+<project-root>\.agents\skills\
 ```
 
-Use this when the skill belongs to a specific repository or portfolio. In this repository, project skills live in:
+Use this when the skill should be available to Codex only inside one repository.
+
+This portfolio stores the source versions in:
 
 ```text
 skills\
+```
+
+To use them as project-level Codex skills, copy them into `.agents\skills\`:
+
+```text
+skills\scout        -> .agents\skills\scout
+skills\planner      -> .agents\skills\planner
+skills\builder      -> .agents\skills\builder
+skills\critic-qa    -> .agents\skills\critic-qa
+skills\librarian    -> .agents\skills\librarian
+skills\operator     -> .agents\skills\operator
+skills\guardian     -> .agents\skills\guardian
 ```
 
 ## Copying Skills

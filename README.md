@@ -1,5 +1,7 @@
 # AI Agent Skills Portfolio
 
+![Architettura a layers degli agenti](docs/assets/agent-layers-architecture.png)
+
 A practical portfolio of reusable AI-agent skills for Codex, Claude Code, and AI-assisted technical workflows.
 
 This repository is designed to show how repeated work patterns can be transformed into clear, reusable, and verifiable agent instructions.

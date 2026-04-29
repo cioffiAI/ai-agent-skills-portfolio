@@ -111,6 +111,18 @@ Install only `AC-Workflow`, the workflow selector skill:
 cioffi-agentskills install workflow --target both
 ```
 
+Uninstall one packaged skill:
+
+```bash
+cioffi-agentskills uninstall workflow --target both
+```
+
+Uninstall all packaged skills:
+
+```bash
+cioffi-agentskills uninstall all --target both
+```
+
 The CLI installs skills into:
 
 ```text
@@ -134,15 +146,19 @@ cioffi-agentskills install all --target both --dry-run
 cioffi-agentskills install all --target both --yes
 cioffi-agentskills install all --target both --yes --force
 cioffi-agentskills install workflow --target both --dry-run --json
+cioffi-agentskills uninstall workflow --target both --dry-run
+cioffi-agentskills uninstall all --target both --yes
+cioffi-agentskills uninstall all --target both --dry-run --json
 ```
 
 Safety behavior:
 
 ```text
-without --yes, interactive installs ask for confirmation;
-with --json, real installs require --yes;
+without --yes, interactive install and uninstall commands ask for confirmation;
+with --json, real install and uninstall commands require --yes;
 without --force, existing skill folders are skipped;
 with --force, existing skill folders are backed up before replacement;
+uninstall removes only matching packaged skill folders under the selected target;
 --dry-run shows planned actions without writing files.
 ```
 
@@ -176,13 +192,26 @@ cioffi-agentskills install workflow --target both
 
 Installs only `AC-Workflow`.
 
+```bash
+cioffi-agentskills uninstall workflow --target both
+```
+
+Uninstalls only `AC-Workflow` from the selected target directories.
+
+```bash
+cioffi-agentskills uninstall all --target both
+```
+
+Uninstalls all packaged portfolio skills from the selected target directories.
+
 Safety behavior:
 
 ```text
 --dry-run previews actions without writing files;
---json requires --yes for real installs;
+--json requires --yes for real install and uninstall commands;
 existing skill folders are skipped unless --force is used;
 --force backs up existing skill folders before replacing them.
+uninstall skips skills that are not currently installed.
 ```
 
 ---
@@ -217,30 +246,10 @@ scout
 workflow
 ```
 
----
-
-## Manual Uninstall
-
-Until a CLI `uninstall` command is added, remove installed skills manually.
-
-PowerShell:
+Remove installed skills:
 
 ```powershell
-$skills = @(
-  "builder",
-  "critic-qa",
-  "guardian",
-  "librarian",
-  "operator",
-  "planner",
-  "scout",
-  "workflow"
-)
-
-foreach ($skill in $skills) {
-  Remove-Item -Recurse -Force "$HOME\.codex\skills\$skill" -ErrorAction SilentlyContinue
-  Remove-Item -Recurse -Force "$HOME\.claude\skills\$skill" -ErrorAction SilentlyContinue
-}
+cioffi-agentskills uninstall all --target both
 ```
 
 ---
@@ -645,6 +654,7 @@ What should be reused in future workflows?
 - [x] Add packaged local skill installation
 - [x] Add `install all` workflow
 - [x] Add confirmation, dry-run, JSON, skip, and force behavior
+- [x] Add `uninstall` and `uninstall all` workflows
 
 ### v0.4 - Public Presentation
 

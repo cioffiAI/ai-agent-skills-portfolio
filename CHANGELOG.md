@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-- No unreleased changes yet.
+- Added `cioffi-agentskills uninstall <skill|all>` for removing packaged skills from Codex and Claude Code target directories.
+- Documented uninstall and uninstall-all CLI usage.
 
 ## v0.1.2 - install all npm release fix
 

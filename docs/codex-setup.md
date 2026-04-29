@@ -75,6 +75,24 @@ Use `--dry-run` to preview the installation without writing files:
 cioffi-agentskills install all --target codex --dry-run
 ```
 
+To remove one installed skill:
+
+```powershell
+cioffi-agentskills uninstall workflow --target codex
+```
+
+To remove all packaged portfolio skills from Codex:
+
+```powershell
+cioffi-agentskills uninstall all --target codex
+```
+
+Use `--dry-run` to preview uninstall actions without writing files:
+
+```powershell
+cioffi-agentskills uninstall all --target codex --dry-run
+```
+
 Each skill folder should contain at minimum:
 
 ```text

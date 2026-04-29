@@ -62,6 +62,24 @@ Use `--dry-run` to preview the installation without writing files:
 cioffi-agentskills install all --target claude --dry-run
 ```
 
+To remove one installed skill:
+
+```powershell
+cioffi-agentskills uninstall workflow --target claude
+```
+
+To remove all packaged portfolio skills from Claude Code:
+
+```powershell
+cioffi-agentskills uninstall all --target claude
+```
+
+Use `--dry-run` to preview uninstall actions without writing files:
+
+```powershell
+cioffi-agentskills uninstall all --target claude --dry-run
+```
+
 Each skill folder should contain:
 
 ```text

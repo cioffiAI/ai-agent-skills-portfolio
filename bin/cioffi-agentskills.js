@@ -61,6 +61,10 @@ async function run(argv) {
     return installSkill(parsed);
   }
 
+  if (parsed.command === "uninstall") {
+    return uninstallSkill(parsed);
+  }
+
   throw cliError("UNKNOWN_COMMAND", `Unknown command: ${parsed.command}`);
 }
 
@@ -306,6 +310,108 @@ const skillPath = path.join(sourceDir, "SKILL.md");
   };
 }
 
+async function uninstallSkill(options) {
+  const skillName = options.positional[0];
+  if (!skillName) {
+    throw cliError("MISSING_SKILL", "uninstall requires a skill name or all");
+  }
+  validateSkillName(skillName);
+
+  const skillNames = skillName === "all"
+    ? listLocalSkills().map((skill) => skill.name)
+    : [skillName];
+
+  if (skillNames.length === 0) {
+    throw cliError("NO_SKILLS_FOUND", "No local skills found in package");
+  }
+
+  if (skillName !== "all" && !fs.existsSync(path.join(PACKAGE_ROOT, "skills", skillName, "SKILL.md"))) {
+    throw cliError("SKILL_NOT_FOUND", `Skill not found: ${skillName}`);
+  }
+
+  const targets = targetDirectories(options.target);
+  const actions = [];
+
+  for (const name of skillNames) {
+    for (const target of targets) {
+      const skillDir = path.join(target.skillsDir, name);
+      actions.push({
+        target: target.name,
+        skill: name,
+        skillDir,
+        exists: fs.existsSync(skillDir),
+      });
+    }
+  }
+
+  if (options.dryRun) {
+    return {
+      ok: true,
+      command: "uninstall",
+      json: options.json,
+      text: formatUninstallDryRun(actions),
+      results: actions.map((action) => ({
+        ...action,
+        dryRun: true,
+        uninstalled: false,
+      })),
+    };
+  }
+
+  if (options.json && !options.yes) {
+    throw cliError(
+      "CONFIRMATION_REQUIRED",
+      "Use --yes with --json to confirm non-interactive uninstallation"
+    );
+  }
+
+  if (!options.json && !options.yes) {
+    const confirmed = await askConfirm(actions, "uninstall");
+    if (!confirmed) {
+      return {
+        ok: false,
+        command: "uninstall",
+        json: false,
+        text: "Uninstall cancelled.",
+        results: [],
+      };
+    }
+  }
+
+  const results = [];
+
+  for (const action of actions) {
+    if (!action.exists) {
+      results.push({
+        target: action.target,
+        skill: action.skill,
+        path: action.skillDir,
+        uninstalled: false,
+        skipped: true,
+        reason: "not_installed",
+      });
+      continue;
+    }
+
+    fs.rmSync(action.skillDir, { recursive: true, force: true });
+
+    results.push({
+      target: action.target,
+      skill: action.skill,
+      path: action.skillDir,
+      uninstalled: true,
+    });
+  }
+
+  return {
+    ok: true,
+    command: "uninstall",
+    json: options.json,
+    text: formatUninstall(results),
+    results,
+  };
+}
+
 async function installAllSkills(options) {
   const skills = listLocalSkills();
 
@@ -428,13 +534,20 @@ async function installAllSkills(options) {
   };
 }
 
-async function askConfirm(actions) {
+async function askConfirm(actions, actionName = "install") {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
 
 const lines = actions.map((action) => {
+  if (actionName === "uninstall") {
+    if (action.exists) {
+      return `  Uninstall: ${action.skillDir}`;
+    }
+    return `  Not installed, will skip: ${action.skillDir}`;
+  }
+
   if (action.exists) {
     return `  Exists, will skip unless --force: ${action.skillDir}`;
   }
@@ -442,7 +555,7 @@ const lines = actions.map((action) => {
 });
 
 
-  const question = `Confirm install (${actions.length} target${actions.length > 1 ? "s" : ""})?\n${lines.join("\n")}\n[y/N] `;
+  const question = `Confirm ${actionName} (${actions.length} target${actions.length > 1 ? "s" : ""})?\n${lines.join("\n")}\n[y/N] `;
 
   return new Promise((resolve) => {
     rl.question(question, (answer) => {
@@ -459,6 +572,17 @@ function formatInstallDryRun(actions) {
         return `Would skip existing skill unless --force: ${action.skillDir}`;
       }
       return `Would install: ${action.skillDir}`;
+    })
+    .join("\n");
+}
+
+function formatUninstallDryRun(actions) {
+  return actions
+    .map((action) => {
+      if (action.exists) {
+        return `Would uninstall: ${action.skillDir}`;
+      }
+      return `Would skip missing skill: ${action.skillDir}`;
     })
     .join("\n");
 }
@@ -600,6 +724,18 @@ function formatInstall(results) {
     .join("\n");
 }
 
+function formatUninstall(results) {
+  return results
+    .map((result) => {
+      if (result.skipped) {
+        return `Skipped ${result.skill} for ${result.target}: ${result.path} reason=${result.reason}`;
+      }
+
+      return `Uninstalled ${result.skill} for ${result.target}: ${result.path}`;
+    })
+    .join("\n");
+}
+
 function printSuccess(result) {
   if (!result.ok) {
     process.exitCode = 1;
@@ -657,15 +793,16 @@ Install packaged AI agent skills for Codex and Claude Code.
 
 Usage:
   cioffi-agentskills install <skill> [--json] [--dry-run] [--yes] [--force] [--target codex|claude|both]
+  cioffi-agentskills uninstall <skill|all> [--json] [--dry-run] [--yes] [--target codex|claude|both]
   cioffi-agentskills list [--json] [--repo owner/name] [--ref ref]
   cioffi-agentskills install <skill> [--json] [--dry-run] [--yes] [--force] [--target codex|claude|both] [--repo owner/name] [--ref ref]
 
 Options:
-  --target <target>  Install/check codex, claude, or both. Default: both.
+  --target <target>  Install/uninstall/check codex, claude, or both. Default: both.
   --repo <repo>      GitHub repo owner/name for doctor/list. Default: ${DEFAULT_REPO}.
   --ref <ref>        Git ref for doctor/list. Default: ${DEFAULT_REF}.
   --json             Print stable JSON output (skips all prompts).
-  --dry-run          Show install actions without writing files.
+  --dry-run          Show install/uninstall actions without writing files.
   --yes, -y          Skip confirmation prompt (auto-confirm).
   --force            Existing installs are backed up before replacement.
   --version, -v      Print the CLI version.
